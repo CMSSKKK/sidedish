@@ -2,6 +2,7 @@ package kr.codesquad.sidedish.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import kr.codesquad.sidedish.domain.Event;
 import kr.codesquad.sidedish.dto.SpecialEdition;
 import kr.codesquad.sidedish.repository.JdbcEventRepository;
