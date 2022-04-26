@@ -9,7 +9,7 @@ public class SpecialEdition {
     private final String name = "짱민BEST 추천 메뉴";
     private List<Event> eventDishes;
 
-    public SpecialEdition(List<Event> eventDishes) {
+    public SpecialEdition(List<EventResponse> eventDishes) {
         this.eventDishes = eventDishes;
     }
 
@@ -17,7 +17,7 @@ public class SpecialEdition {
         return name;
     }
 
-    public List<Event> getEventDishes() {
+    public List<EventResponse> getEventDishes() {
         return eventDishes;
     }
 }
