@@ -1,10 +1,16 @@
-import styled from 'styled-components';
-import Card from '../Card';
-import leftArrow from '../../image/leftArrow.svg';
-import rightArrow from '../../image/rightArrow.svg';
+import styled, { css } from 'styled-components';
+import Card from 'Main/Card';
+import { useState, useRef } from 'react';
+import { ReactComponent as LeftArrowIcon } from 'image/leftArrow.svg';
+import { ReactComponent as RightArrowIcon } from 'image/rightArrow.svg';
+import { MAIN_ITEMS } from 'MockData/dummyData';
 
 const DishContainerWrapper = styled.div`
   position: relative;
+`;
+
+const DishContainerBox = styled.div`
+  overflow: hidden;
   padding: 34px 0 56px 0;
 
   h2 {
@@ -14,76 +20,104 @@ const DishContainerWrapper = styled.div`
 `;
 
 const DishCardList = styled.div`
-  display: flex;
+  ${({ theme }) => theme.flexLayout.default};
 `;
 
-const items = {
-  id: 1,
-  title: '식탁을 풍성하게 하는 정갈한 밑반찬',
-  data: [
-    {
-      id: 1,
-      img: 'https://random.imagecdn.app/412/412',
-      title: '오리 주물럭_반조리',
-      desc: '감칠맛 나는 매콤한 양념',
-      salePrice: 12640,
-      normalPrice: 15800,
-      tag: '런칭특가',
-    },
-    {
-      id: 2,
-      img: 'https://random.imagecdn.app/412/412',
-      title: '돼지 주물럭_반조리',
-      desc: '감칠맛 나는 매콤한 양념',
-      salePrice: 12640,
-      normalPrice: 15800,
-      tag: '이벤트특가',
-    },
-    {
-      id: 3,
-      img: 'https://random.imagecdn.app/412/412',
-      title: '달콤 오리 주물럭_반조리',
-      desc: '감칠맛 나는 달콤한 양념',
-      salePrice: 12640,
-      normalPrice: 15800,
-      tag: '런칭특가',
-    },
-    {
-      id: 4,
-      img: 'https://random.imagecdn.app/412/412',
-      title: '달콤 오리 주물럭_반조리',
-      desc: '감칠맛 나는 달콤한 양념',
-      salePrice: 12640,
-      normalPrice: 15800,
-      tag: '런칭특가',
-    },
-  ],
-};
-
-const LeftArrow = styled.img`
+const LeftArrow = styled(LeftArrowIcon)`
   position: absolute;
   top: 50%;
   left: -42px;
-  filter: invert(86%) sepia(34%) saturate(0%) hue-rotate(212deg) brightness(84%) contrast(88%);
+  cursor: pointer;
+
+  path {
+    stroke: ${(props) => {
+      return props.focus === 'true'
+        ? css`
+            ${({ theme }) => theme.colors.black}
+          `
+        : css`
+            ${({ theme }) => theme.colors.gray3}
+          `;
+    }};
+  }
 `;
 
-const RightArrow = styled.img`
+const RightArrow = styled(RightArrowIcon)`
   position: absolute;
   top: 50%;
   right: -42px;
+  cursor: pointer;
+  path {
+    stroke: ${(props) => {
+      return props.focus === 'true'
+        ? css`
+            ${({ theme }) => theme.colors.black}
+          `
+        : css`
+            ${({ theme }) => theme.colors.gray3}
+          `;
+    }};
+  }
 `;
 
 const DishContainer = () => {
-  const cardList = items.data.map((item) => {
+  const cardList = MAIN_ITEMS.data.map((item) => {
     return <Card key={item.id} item={item} imageSize={'medium'}></Card>;
   });
 
+  const totalCount = MAIN_ITEMS.data.length;
+  const currentPosition = useRef(0);
+  const slider = useRef();
+  const [leftFocus, setLeftFocus] = useState(false);
+  const [rightFocus, setRightFocus] = useState(true);
+
+  const checkFirstAndLastPosition = (arrow) => {
+    if (currentPosition.current < 0 && arrow === 'left') {
+      currentPosition.current = 0;
+      setLeftFocus(false);
+      return;
+    }
+
+    if (currentPosition.current + 4 > totalCount && arrow === 'right') {
+      const remainder = Math.floor(totalCount % 4);
+      currentPosition.current = currentPosition.current - 4 + remainder;
+      setRightFocus(false);
+      return;
+    }
+  };
+
+  const calculatePosition = (arrow) => {
+    if (arrow === 'left') {
+      currentPosition.current -= 4;
+    } else if (arrow === 'right') {
+      currentPosition.current += 4;
+    }
+
+    setRightFocus(true);
+    setLeftFocus(true);
+    checkFirstAndLastPosition(arrow);
+    slider.current.style.transform = `translateX(${-currentPosition.current * 326}px)`;
+    slider.current.style.transition = 'transform 500ms';
+  };
+
+  const onClickLeft = () => {
+    if (currentPosition.current === 0) return;
+    calculatePosition('left');
+  };
+
+  const onClickRight = () => {
+    if (currentPosition.current + 4 >= totalCount) return;
+    calculatePosition('right');
+  };
+
   return (
     <DishContainerWrapper>
-      <h2>{items.title}</h2>
-      <DishCardList>{cardList}</DishCardList>
-      <LeftArrow src={leftArrow}></LeftArrow>
-      <RightArrow src={rightArrow}></RightArrow>
+      <DishContainerBox>
+        <h2>{MAIN_ITEMS.title}</h2>
+        <DishCardList ref={slider}>{cardList}</DishCardList>
+      </DishContainerBox>
+      <LeftArrow onClick={onClickLeft} focus={String(leftFocus)} />
+      <RightArrow onClick={onClickRight} focus={String(rightFocus)} />
     </DishContainerWrapper>
   );
 };
