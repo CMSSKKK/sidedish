@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const CardDelivery = styled.div`
   position: absolute;
@@ -33,7 +33,7 @@ export default function CardDeliveryInfo({ infos, hover }) {
   return (
     <CardDelivery hover={hover}>
       <DeliveryText>{firstInfo}</DeliveryText>
-      {secondInfo && <Divider></Divider>}
+      {secondInfo && <Divider />}
       <DeliveryText>{secondInfo}</DeliveryText>
     </CardDelivery>
   );
