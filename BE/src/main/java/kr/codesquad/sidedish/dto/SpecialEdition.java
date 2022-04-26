@@ -7,7 +7,7 @@ import kr.codesquad.sidedish.domain.Event;
 public class SpecialEdition {
 
     private final String name = "짱민BEST 추천 메뉴";
-    private List<Event> eventDishes;
+    private List<EventResponse> eventDishes;
 
     public SpecialEdition(List<EventResponse> eventDishes) {
         this.eventDishes = eventDishes;
