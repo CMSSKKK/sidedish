@@ -96,17 +96,17 @@ public class Dish {
     @Override
     public String toString() {
         return "Dish{" +
-                "id=" + id +
-                ", categoryId=" + categoryId +
-                ", eventId=" + eventId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", stock=" + stock +
-                ", price=" + price +
-                ", deliveryType=" + deliveryType +
-                ", discountPolicy=" + discountPolicy +
-                ", images=" + images +
-                ", pointPercent=" + pointPercent +
-                '}';
+            "id=" + id +
+            ", categoryId=" + categoryId +
+            ", eventId=" + eventId +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", stock=" + stock +
+            ", price=" + price +
+            ", deliveryType=" + deliveryType +
+            ", discountPolicy=" + discountPolicy +
+            ", images=" + images +
+            ", pointPercent=" + pointPercent +
+            '}';
     }
 }

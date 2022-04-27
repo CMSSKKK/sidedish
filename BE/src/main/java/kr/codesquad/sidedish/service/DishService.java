@@ -7,6 +7,8 @@ import kr.codesquad.sidedish.domain.Dish;
 import kr.codesquad.sidedish.dto.DishDetailResponse;
 import kr.codesquad.sidedish.dto.DishRecommendation;
 import kr.codesquad.sidedish.dto.DishSimpleResponse;
+import kr.codesquad.sidedish.exception.BusinessException;
+import kr.codesquad.sidedish.exception.ErrorCode;
 import kr.codesquad.sidedish.repository.JdbcDishRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,8 @@ public class DishService {
     }
 
     public DishDetailResponse findOne(Long id) {
-        Dish dish = jdbcDishRepository.findById(id).orElseThrow();
+        Dish dish = jdbcDishRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NoDishError));
 
         return DishDetailResponse.from(dish);
     }
@@ -32,20 +35,22 @@ public class DishService {
         PageRequest p = PageRequest.of(currentPage, PAGE_SIZE);
 
         return jdbcDishRepository.findDishesByCategoryId(categoryId, p)
-                .stream()
-                .map(DishSimpleResponse::of)
-                .collect(Collectors.toList());
+            .stream()
+            .map(DishSimpleResponse::of)
+            .collect(Collectors.toList());
     }
 
     public List<DishRecommendation> findDishRecommendations(Long id) {
-        Dish dish = jdbcDishRepository.findById(id).orElseThrow();
+        Dish dish = jdbcDishRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.NoDishError));
         Long categoryId = dish.getCategoryId();
 
-        List<Dish> dishesByOtherCategoryId = jdbcDishRepository.findDishesByOtherCategoryId(categoryId);
+        List<Dish> dishesByOtherCategoryId = jdbcDishRepository.findDishesByOtherCategoryId(
+            categoryId);
 
         return dishesByOtherCategoryId.stream()
-                .map(DishRecommendation::from)
-                .collect(Collectors.toList());
+            .map(DishRecommendation::from)
+            .collect(Collectors.toList());
     }
 
 }

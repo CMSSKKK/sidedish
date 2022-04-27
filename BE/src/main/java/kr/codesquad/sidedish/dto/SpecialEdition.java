@@ -1,6 +1,7 @@
 package kr.codesquad.sidedish.dto;
 
 import java.util.List;
+
 import kr.codesquad.sidedish.domain.Event;
 
 public class SpecialEdition {
