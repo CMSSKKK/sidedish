@@ -63,7 +63,6 @@ const DishContainer = ({ items }) => {
   const cardList = items.dishes.map((item) => {
     return <Card key={item.id} item={item} imageSize={'medium'}></Card>;
   });
-
   const totalCount = items.dishes.length;
   const currentPosition = useRef(0);
   const slider = useRef();
