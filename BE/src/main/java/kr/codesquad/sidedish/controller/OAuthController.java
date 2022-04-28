@@ -22,12 +22,14 @@ public class OAuthController {
 
     @GetMapping("/oauth")
     public ResponseEntity<String> requestAccessToken(@RequestParam String code,
-        HttpServletResponse httpServletResponse) throws IOException {
+                                             HttpServletResponse httpServletResponse) throws IOException {
         GitHubToken token = oAuthService.getAccessToken(code);
         String userEmail = oAuthService.getUserEmail(token);
+        String avataUrl = oAuthService.getAvataUrl(token);
         httpServletResponse.setHeader("userEmail", userEmail);
-        System.out.println("userEmail = " + userEmail);
-        return ResponseEntity.ok("success");
+        httpServletResponse.setHeader("avataUrl", avataUrl);
+
+        return ResponseEntity.ok("Success");
     }
 
 
