@@ -25,4 +25,12 @@ public class OrderRequest {
     public int getQuantity() {
         return quantity;
     }
+
+    @Override
+    public String toString() {
+        return "OrderRequest{" +
+                "userEmail='" + userEmail + '\'' +
+                ", quantity=" + quantity +
+                '}';
+    }
 }
